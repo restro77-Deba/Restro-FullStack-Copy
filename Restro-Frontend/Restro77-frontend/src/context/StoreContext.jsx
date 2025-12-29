@@ -6,8 +6,7 @@ import foodListJSON from "../assets/foods_data.json";
 
 const StoreContextProvider = (props) => {
     const [cartItem, setCartItems] = useState({});
-    // const URl = "https://restro77-backend-rho.vercel.app"
-    const URl = "http://localhost:4000"
+    const URl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
     const [token, setToken] = useState("")
     const [food_list, setFoodList] = useState([])
     const [Items, setItems] = useState(0);
