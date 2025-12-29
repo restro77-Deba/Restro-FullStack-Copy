@@ -12,7 +12,6 @@ const PlaceOrder = () => {
 
   const [address, setAddress] = useState("");
   const [usePoints, setUsePoints] = useState(false);
-  const [locationLoading, setLocationLoading] = useState(false);
 
   // Saved Addresses State
   const [savedAddresses, setSavedAddresses] = useState([]);
@@ -53,59 +52,7 @@ const PlaceOrder = () => {
     }
   }
 
-  const fetchLocation = async () => {
-    if (!token) return;
-    try {
-      const response = await axios.get(URl + "/api/user/get-profile", { headers: { token } });
-      console.log(response.data);
-
-      if (response.data.success) {
-        setAddress(response.data.userData.address);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    // if (navigator.geolocation) {
-    //   setLocationLoading(true);
-    //   toast.info("Fetching Location...", { autoClose: 1500 });
-    //   navigator.geolocation.getCurrentPosition(async (position) => {
-    //     const { latitude, longitude } = position.coords;
-    //     try {
-    //       // Use Backend Proxy to avoid CORS and set User-Agent
-    //       const response = await axios.get(URl + "/api/user/get-address", {
-    //         params: { lat: latitude, lng: longitude },
-    //         headers: { token }
-    //       });
-
-    //       if (response.data && response.data.success) {
-    //         setAddress(response.data.address);
-    //         setLocationLoading(false);
-    //         toast.success("Location Fetched!");
-    //       } else {
-    //         toast.error("Could not fetch address details.");
-    //         setAddress(`${latitude}, ${longitude}`); // Fallback
-    //         setLocationLoading(false);
-    //       }
-    //     } catch (error) {
-    //       console.error("Geocoding error:", error);
-    //       setAddress(`${latitude}, ${longitude}`); // Fallback
-    //       setLocationLoading(false);
-    //       toast.warn("Could not get details address, using coordinates.");
-    //     }
-    //   }, (error) => {
-    //     console.error("Geolocation error:", error);
-    //     toast.error("Location permission denied.");
-    //     setLocationLoading(false);
-    //   });
-    // } else {
-    //   toast.error("Geolocation not supported.");
-    // }
-
-  }
-  useEffect(async () => {
-    await fetchLocation();
-  }, [])
+  // Location fetching removed as requested
   // Order Type State
   const [orderType, setOrderType] = useState("Delivery");
 
@@ -257,7 +204,7 @@ const PlaceOrder = () => {
 
               {savedAddresses.length > 0 && (
                 <div style={{ marginBottom: '15px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px', color: '#555' }}>Select Saved Address</label>
+                  <label style={{ display: 'block', marginBottom: '5px', color: '#ccc' }}>Select Saved Address</label>
                   <select
                     value={selectedAddressId}
                     onChange={handleAddressSelect}
@@ -271,27 +218,9 @@ const PlaceOrder = () => {
                 </div>
               )}
 
-              <label style={{ display: 'block', marginBottom: '10px', color: '#555' }}>Delivery Address</label>
+              <label style={{ display: 'block', marginBottom: '10px', color: '#ccc' }}>Delivery Address</label>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <button
-                  type="button"
-                  onClick={fetchLocation}
-                  disabled={locationLoading}
-                  style={{
-                    padding: "12px 20px",
-                    background: locationLoading ? "#ccc" : "#000",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: locationLoading ? "not-allowed" : "pointer",
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}
-                >
-                  Fetch Current
-                </button>
-                {/* Add Map Button here later if needed */}
+                {/* Map Button removed along with fetch current location */}
               </div>
 
               <textarea
@@ -317,7 +246,7 @@ const PlaceOrder = () => {
                   checked={saveThisAddress}
                   onChange={(e) => setSaveThisAddress(e.target.checked)}
                 />
-                <label htmlFor="saveAddr" style={{ cursor: 'pointer', color: '#555' }}>Save this address for future</label>
+                <label htmlFor="saveAddr" style={{ cursor: 'pointer', color: '#ccc' }}>Save this address for future</label>
 
                 {saveThisAddress && (
                   <input
@@ -334,7 +263,7 @@ const PlaceOrder = () => {
         ) : orderType === "Dine-in" ? (
           <div style={{ marginBottom: "20px" }}>
             <p className={style.title}>Table Information</p>
-            <label style={{ display: 'block', marginBottom: '10px', color: '#555' }}>Enter Table Number</label>
+            <label style={{ display: 'block', marginBottom: '10px', color: '#ccc' }}>Enter Table Number</label>
             <input
               type="text"
               value={address} // Reusing address state for Table No

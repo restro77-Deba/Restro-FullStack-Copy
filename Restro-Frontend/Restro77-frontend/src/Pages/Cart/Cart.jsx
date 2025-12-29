@@ -6,25 +6,30 @@ import { FaRupeeSign } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import { GiCancel } from "react-icons/gi";
 const Cart = () => {
-  const { cartItem, food_list, removeFromCart, getTotalCartAmount , URl} = useContext(StoreContext);
+  const { cartItem, food_list, removeFromCart, getTotalCartAmount, URl } = useContext(StoreContext);
 
   const navigate = useNavigate();
-  const checkOut=()=>{
-     if (getTotalCartAmount()>0) {
-        navigate('/placeorder');
-     }
-     else{
-       toast.warn('There is no item', {
-position: "top-center",
-autoClose: 5000,
-hideProgressBar: false,
-closeOnClick: false,
-pauseOnHover: true,
-draggable: true,
-progress: undefined,
-theme: "dark",
-});
-     } 
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const checkOut = () => {
+    if (getTotalCartAmount() > 0) {
+      navigate('/placeorder');
+    }
+    else {
+      toast.warn('There is no item', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
   }
 
   return (
@@ -56,7 +61,7 @@ theme: "dark",
                     className={style.Cross}
                     onClick={() => removeFromCart(item._id)}
                   >
-                   <GiCancel color="red" />
+                    <GiCancel color="red" />
                   </p>
                 </div>
                 <hr />
@@ -76,12 +81,12 @@ theme: "dark",
             <hr />
             <div className={style.CartTotalDetails}>
               <p>Delivery Fee</p>
-              <p><FaRupeeSign />{getTotalCartAmount()===0?0:5}</p> 
-            </div> 
+              <p><FaRupeeSign />{getTotalCartAmount() === 0 ? 0 : 5}</p>
+            </div>
             <hr />
             <div className={style.CartTotalDetails}>
               <b>Total</b>
-              <b><FaRupeeSign />{getTotalCartAmount()===0?0:getTotalCartAmount()+5}</b>
+              <b><FaRupeeSign />{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 5}</b>
             </div>
           </div>
           <button onClick={checkOut}>Checkout</button>
