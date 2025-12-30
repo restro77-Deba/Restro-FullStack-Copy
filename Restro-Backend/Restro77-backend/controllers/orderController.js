@@ -2,9 +2,7 @@ import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js"
 import Razorpay from "razorpay";
 import crypto from "crypto";
-
-/* Uncomment for DigitalOcean / VPS */
-// import { io } from "../server.js"; 
+import { io } from "../server.js";
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -59,8 +57,7 @@ const placeOrder = async (req, res) => {
             const order = await razorpay.orders.create(options);
 
             // Emit new order event (Pending Payment)
-            /* Uncomment for DigitalOcean */
-            // io.emit("newOrder", newOrder); 
+            io.emit("newOrder", newOrder);
 
             res.json({
                 success: true,
@@ -106,8 +103,7 @@ const verifyRazorpay = async (req, res) => {
             }
 
             // Emit update
-            /* Uncomment for DigitalOcean */
-            // io.emit("orderStatusUpdated", { orderId: orderId, payment: true });
+            io.emit("orderStatusUpdated", { orderId: orderId, payment: true });
 
             res.json({ success: true, message: "Payment Verified", pointsEarned: order.pointsEarned });
         } else {
@@ -191,15 +187,12 @@ const updateStatus = async (req, res) => {
         await orderModel.findByIdAndUpdate(req.body.orderId, updateData);
 
         // Include prepTime in the emit so specific order listeners get it
-        /* Uncomment for DigitalOcean */
-        /*
         io.emit("orderStatusUpdated", {
             orderId: req.body.orderId,
             status: updateData.status,
             prepTime: updateData.prepTime,
             statusDate: updateData.statusDate
         });
-        */
 
         res.json({ success: true, message: "Status Updated" })
     } catch (error) {

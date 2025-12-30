@@ -50,11 +50,6 @@ app.use((req, res, next) => {
 // Create HTTP server
 const server = createServer(app);
 
-/* ====================================================================
-   SOCKET.IO SETUP (Uncomment this block for DigitalOcean / VPS)
-   Note: Vercel Serverless does NOT support persistent websockets.
-   ==================================================================== */
-/*
 // Initialize Socket.io
 const io = new Server(server, {
     cors: {
@@ -72,8 +67,6 @@ io.on("connection", (socket) => {
         console.log("User Disconnected", socket.id);
     });
 });
-*/
-/* ==================================================================== */
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -110,8 +103,12 @@ if (process.env.NODE_ENV !== 'production') {
     server.listen(port, () => {
         console.log(`Server Running on http://localhost:${port}`)
     })
+} else {
+    // For Production (DigitalOcean / VPS)
+    server.listen(port, () => {
+        console.log(`Server Running on port ${port}`)
+    })
 }
 
-/* Uncomment for DigitalOcean */
-// export { io };
+export { io };
 export default app;
