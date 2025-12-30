@@ -1,45 +1,54 @@
+/* ================= HEADER ROOT ================= */
 .header {
-    height: 38vw;
-    min-height: 450px;
-    width: 95%;
-    /* Make it slightly contained for a card look, or 100% for full width. User said modern dev style, often slightly rounded card in container looks nice. Reference to previous 'margin: 0 auto' suggests centered. */
-    margin: 30px auto;
-    border-radius: 20px;
     position: relative;
+    width: 95%;
+    height: 38vw;
+    min-height: 420px;
+    margin: 28px auto;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    cursor: grab;
 }
 
+.header:active {
+    cursor: grabbing;
+}
+
+/* ================= SLIDES ================= */
 .slide {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background-size: cover;
     background-position: center;
     opacity: 0;
-    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
-    transform: scale(1.05);
-    /* Slight zoom out effect on enter */
+    transform: scale(1.06);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+    /* inactive slides don't capture clicks */
 }
 
 .slide.active {
     opacity: 1;
     transform: scale(1);
     z-index: 1;
+    pointer-events: auto;
 }
 
-/* Dark Overlay */
+/* ================= DARK OVERLAY ================= */
 .slide::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.65) 0%,
+            rgba(0, 0, 0, 0.25) 60%);
     z-index: 1;
+    pointer-events: none;
+    /* 🔑 NEVER block arrows */
 }
 
-/* Background Images */
+/* ================= BACKGROUNDS ================= */
 .bg1 {
     background-image: url("/hero_bg.png");
 }
@@ -52,178 +61,173 @@
     background-image: url("/hero_bg2.jpg");
 }
 
+/* ================= CONTENT ================= */
 .content {
     position: absolute;
-    bottom: 10%;
     left: 6%;
-    width: 50%;
+    bottom: 12%;
+    max-width: 520px;
     z-index: 2;
-    color: white;
+    color: #ffffff;
     opacity: 0;
     transform: translateY(30px);
-    transition: 0.5s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5vw;
+    gap: 14px;
+
+    pointer-events: none;
+    /* 🔑 content won't block arrows */
 }
 
-.active .content {
+.slide.active .content {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: 0.3s;
+    transition-delay: 0.25s;
 }
 
+/* Text */
 .content h2 {
-    font-size: max(4.5vw, 32px);
+    font-size: clamp(32px, 4.5vw, 56px);
     font-weight: 700;
-    line-height: 1.2;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.15;
 }
 
 .content p {
-    font-size: max(1.1vw, 14px);
-    color: #f0f0f0;
+    font-size: clamp(14px, 1.1vw, 16px);
+    color: #e5e7eb;
     line-height: 1.6;
     max-width: 90%;
 }
 
+/* CTA BUTTON (clickable again) */
 .content a {
-    padding: 12px 30px;
-    background: white;
-    color: #333;
-    font-size: max(1vw, 14px);
+    pointer-events: auto;
+    display: inline-block;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #ff6b4a, #ff8364);
+    color: #ffffff;
+    font-size: 14px;
     font-weight: 600;
-    border-radius: 50px;
+    border-radius: 999px;
     text-decoration: none;
-    transition: all 0.3s ease;
-    border: 2px solid white;
+    width: fit-content;
+    box-shadow: 0 8px 20px rgba(255, 107, 74, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .content a:hover {
-    background: transparent;
-    color: white;
     transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(255, 107, 74, 0.45);
 }
 
-/* Controls */
+/* ================= ARROWS ================= */
 .prevBtn,
 .nextBtn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 3;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    cursor: pointer;
+    border: none;
+    background: rgba(0, 0, 0, 0.45);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    transition: 0.3s;
+    cursor: pointer;
+    z-index: 20;
+    /* 🔥 always above content */
+    pointer-events: auto;
+    transition: background 0.25s ease, transform 0.25s ease;
 }
 
 .prevBtn:hover,
 .nextBtn:hover {
-    background: white;
-    color: black;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000000;
+    transform: translateY(-50%) scale(1.05);
 }
 
 .prevBtn {
-    left: 20px;
+    left: 18px;
 }
 
 .nextBtn {
-    right: 20px;
+    right: 18px;
 }
 
-/* Pagination Dots */
+/* ================= DOTS ================= */
 .dots {
     position: absolute;
-    bottom: 30px;
+    bottom: 22px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 10px;
-    z-index: 3;
+    z-index: 20;
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    transition: 0.3s;
+    transition: transform 0.3s ease, background 0.3s ease;
 }
 
-.dot.activeDot {
-    background: white;
-    transform: scale(1.2);
+.activeDot {
+    background: #ffffff;
+    transform: scale(1.3);
 }
 
-/* Mobile Responsiveness */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
     .header {
         height: auto;
-        /* Let content dictate height or use aspect ratio */
-        aspect-ratio: 16/8;
-        /* Cleaner, shorter banner */
-        min-height: 180px;
-        /* Ensure it's not too small */
-        width: 95%;
-        /* Keep it slightly contained like desktop */
-        margin: 10px auto;
-        /* Reduced margin further */
-        border-radius: 15px;
-        /* Keep rounded corners as requested */
+        aspect-ratio: 16 / 8;
+        min-height: 200px;
+        margin: 16px auto;
+        border-radius: 16px;
     }
 
     .content {
-        width: 100%;
-        bottom: 25%;
-        /* Move content up to clear the dots */
         left: 0;
-        padding: 0 15px;
-        align-items: center;
+        bottom: 30%;
+        padding: 0 16px;
         text-align: center;
-    }
-
-    .content h2 {
-        font-size: 6vw;
-        /* Dynamic resizing */
+        align-items: center;
+        max-width: 100%;
     }
 
     .content p {
         display: none;
-        /* Hide description on mobile to save space and reduce clutter */
+    }
+
+    .content h2 {
+        font-size: 6vw;
     }
 
     .content a {
-        padding: 8px 20px;
-        font-size: 12px;
+        padding: 10px 20px;
+        font-size: 13px;
     }
 
     .prevBtn,
     .nextBtn {
-        width: 30px;
-        height: 30px;
+        width: 34px;
+        height: 34px;
         font-size: 0.8rem;
     }
 
     .dots {
         bottom: 10px;
-        /* Move dots down on mobile */
     }
 
     .dot {
         width: 8px;
         height: 8px;
-        /* Smaller dots */
     }
 }

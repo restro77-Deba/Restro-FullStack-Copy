@@ -54,7 +54,7 @@ const Profile = () => {
 
     return (
         <div className='profile-container'>
-            <h2>My Profile</h2>
+            <h2>👤 My Profile</h2>
             <form onSubmit={onUpdate} className='profile-form'>
                 <div className='form-group'>
                     <label>Name</label>
@@ -68,7 +68,7 @@ const Profile = () => {
                     <label>Phone</label>
                     <input type="tel" name="phone" value={userData.phone} onChange={onChangeHandler} placeholder="Add phone number" />
                 </div>
-                 <div className='form-group'>
+                <div className='form-group'>
                     <label>address</label>
                     <textarea type="tel" name="address" value={userData.address} onChange={onChangeHandler} placeholder="Add Address" />
                 </div>

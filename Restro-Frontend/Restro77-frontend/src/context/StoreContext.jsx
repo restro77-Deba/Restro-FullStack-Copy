@@ -7,7 +7,10 @@ import foodListJSON from "../assets/foods_data.json";
 const StoreContextProvider = (props) => {
     const [cartItem, setCartItems] = useState({});
     const URl = (import.meta.env.VITE_BACKEND_URL || "http://localhost:4000").replace(/\/$/, "");
-    const [token, setToken] = useState("")
+
+    // Optimistic UI: Initialize token directly from localStorage to prevent flicker
+    const [token, setToken] = useState(localStorage.getItem("token") || "")
+
     const [food_list, setFoodList] = useState([])
     const [Items, setItems] = useState(0);
     const [userData, setUserData] = useState(null);
@@ -82,7 +85,21 @@ const StoreContextProvider = (props) => {
     const fetchFoodList = async () => {
         // const response = await axios.get(URl + "/api/food/list")
         // setFoodList(response.data.data)
-        setFoodList(foodListJSON)
+        // setFoodList(response.data.data)
+        /*
+        const testItem = {
+            _id: "test_item_1",
+            name: "Test Verification Item (₹1)",
+            image: "food_1.png",
+            price: 1,
+            description: "A dummy item to verify payment flow",
+            category: "noodles", // Appear in first category
+            type: "veg"
+        };
+        // Add test item to the beginning or end
+        setFoodList([testItem, ...foodListJSON])
+        */
+        setFoodList(foodListJSON);
     }
 
     const loadcartData = async (token) => {
@@ -118,10 +135,10 @@ const StoreContextProvider = (props) => {
     useEffect(() => {
         async function loaddata() {
             await fetchFoodList()
-            if (localStorage.getItem("token")) {
-                setToken(localStorage.getItem("token"))
-                await loadcartData(localStorage.getItem("token"));
-                await fetchUserPoints(localStorage.getItem("token"));
+            if (token) {
+                // Token is already set from state initialization, just load data
+                await loadcartData(token);
+                await fetchUserPoints(token);
             }
         }
         loaddata()
@@ -152,6 +169,7 @@ const StoreContextProvider = (props) => {
         token,
         setToken,
         Items,
+        setItems,
         userPoints,
         userData,
         fetchUserPoints,

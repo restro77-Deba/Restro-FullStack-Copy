@@ -14,6 +14,14 @@ const Cart = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Redirect to home if cart becomes empty
+  useEffect(() => {
+    // Only redirect if food_list has loaded (avoid premature redirect) AND cart is legally empty
+    if (food_list.length > 0 && getTotalCartAmount() === 0) {
+      navigate('/');
+    }
+  }, [cartItem, getTotalCartAmount, navigate, food_list]);
+
   const checkOut = () => {
     if (getTotalCartAmount() > 0) {
       navigate('/placeorder');
@@ -48,11 +56,10 @@ const Cart = () => {
         {food_list.map((item, index) => {
           if (cartItem[item._id] > 0) {
             return (
-              <div>
+              <div key={item._id}>
                 <div
                   className={`${style.CartItemsTitle} ${style.CartItemsItem}`}
                 >
-                  <p>{index}</p>
                   <p>{item.name}</p>
                   <p><FaRupeeSign />{item.price}</p>
                   <p>{cartItem[item._id]}</p>
@@ -81,12 +88,12 @@ const Cart = () => {
             <hr />
             <div className={style.CartTotalDetails}>
               <p>Delivery Fee</p>
-              <p><FaRupeeSign />{getTotalCartAmount() === 0 ? 0 : 5}</p>
+              <p><FaRupeeSign />{getTotalCartAmount() === 0 ? 0 : Number(import.meta.env.VITE_DELIVERY_FEE || 0)}</p>
             </div>
             <hr />
             <div className={style.CartTotalDetails}>
               <b>Total</b>
-              <b><FaRupeeSign />{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 5}</b>
+              <b><FaRupeeSign />{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + Number(import.meta.env.VITE_DELIVERY_FEE || 0)}</b>
             </div>
           </div>
           <button onClick={checkOut}>Checkout</button>

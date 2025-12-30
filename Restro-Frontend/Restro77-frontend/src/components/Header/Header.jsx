@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./header.module.css";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const Header = () => {
   const slides = [
     {
       title: "Order your favourite food here",
-      desc: "Choose from a diverse menu featuring a delectable array of dishes crafted with the finest ingredients and culinary expertise. Our mission is to satisfy your cravings and elevate your dining experience, one delicious meal at a time.",
+      desc: "Choose from a diverse menu featuring a delectable array of dishes crafted with the finest ingredients and culinary expertise.",
       bgClass: style.bg1,
       btnText: "View Menu",
     },
@@ -25,31 +25,78 @@ const Header = () => {
   ];
 
   const [current, setCurrent] = useState(0);
+  const autoPlayRef = useRef(null);
+
+  /* ================= AUTOPLAY ================= */
+  const startAutoplay = () => {
+    clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => {
+      setCurrent((prev) =>
+        prev === slides.length - 1 ? 0 : prev + 1
+      );
+    }, 5000);
+  };
+
+  const stopAutoplay = () => {
+    clearInterval(autoPlayRef.current);
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [slides.length]);
+    startAutoplay();
+    return () => stopAutoplay();
+  }, []);
 
+  /* ================= CONTROLS ================= */
   const nextSlide = () => {
-    setCurrent(current === slides.length - 1 ? 0 : current + 1);
+    setCurrent((prev) =>
+      prev === slides.length - 1 ? 0 : prev + 1
+    );
+    startAutoplay();
   };
 
   const prevSlide = () => {
-    setCurrent(current === 0 ? slides.length - 1 : current - 1);
+    setCurrent((prev) =>
+      prev === 0 ? slides.length - 1 : prev - 1
+    );
+    startAutoplay();
+  };
+
+  /* ================= SWIPE SUPPORT ================= */
+  const startX = useRef(0);
+  const endX = useRef(0);
+
+  const handleTouchStart = (e) => {
+    startX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    endX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const diff = startX.current - endX.current;
+
+    if (diff > 50) nextSlide();
+    if (diff < -50) prevSlide();
   };
 
   return (
-    <div className={style.header}>
+    <div
+      className={style.header}
+      onMouseEnter={stopAutoplay}
+      onMouseLeave={startAutoplay}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Slides */}
       {slides.map((slide, index) => (
         <div
           key={index}
           className={`${style.slide} ${index === current ? style.active : ""
             } ${slide.bgClass}`}
         >
-          <div className={`${style.content} ${index === current ? style.contentActive : ""}`}>
+          <div className={style.content}>
             <h2>{slide.title}</h2>
             <p>{slide.desc}</p>
             <a href="#ExploreMenu">{slide.btnText}</a>
@@ -57,20 +104,35 @@ const Header = () => {
         </div>
       ))}
 
-      <button className={style.prevBtn} onClick={prevSlide}>
+      {/* Arrows */}
+      <button
+        className={style.prevBtn}
+        onClick={prevSlide}
+        aria-label="Previous slide"
+      >
         <FaArrowLeft />
       </button>
-      <button className={style.nextBtn} onClick={nextSlide}>
+
+      <button
+        className={style.nextBtn}
+        onClick={nextSlide}
+        aria-label="Next slide"
+      >
         <FaArrowRight />
       </button>
 
+      {/* Pagination */}
       <div className={style.dots}>
         {slides.map((_, index) => (
           <span
             key={index}
-            className={`${style.dot} ${index === current ? style.activeDot : ""}`}
-            onClick={() => setCurrent(index)}
-          ></span>
+            className={`${style.dot} ${index === current ? style.activeDot : ""
+              }`}
+            onClick={() => {
+              setCurrent(index);
+              startAutoplay();
+            }}
+          />
         ))}
       </div>
     </div>

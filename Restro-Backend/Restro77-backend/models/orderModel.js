@@ -12,7 +12,8 @@ const orderSchema = new mongoose.Schema(
         pointsUsed: { type: Number, default: 0 },
         pointsEarned: { type: Number, default: 0 },
         orderType: { type: String, default: "Delivery" },
-        prepTime: { type: Number, default: 0 }
+        prepTime: { type: Number, default: 0 },
+        statusDate: { type: Date, default: Date.now }
     }
 )
 

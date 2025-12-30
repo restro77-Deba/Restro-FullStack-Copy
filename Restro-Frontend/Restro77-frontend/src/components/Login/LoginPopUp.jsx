@@ -51,7 +51,14 @@ const LoginPopUp = ({ setShowLogin }) => {
 
     let newURl = URl;
     try {
+      // 1. Authenticate with Google (Popup)
       const user = await googleLogin();
+
+      // 2. OPTIMISTIC CLOSING: Close modal immediately after Google success
+      setShowLogin(false);
+
+      // 3. Show "Processing" feedback so user knows it's working
+      const pendingToast = toast.loading("Verifying with server...");
 
       const payload = {
         name: currState === "Sign Up" ? data.name : user.displayName,
@@ -62,20 +69,27 @@ const LoginPopUp = ({ setShowLogin }) => {
       console.log("Login Payload:", payload);
 
       newURl += "/api/user/login";
+
+      // 4. Background: Sync with Backend
       const response = await axios.post(newURl, payload);
 
       if (response.data.success) {
+        // Success
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        setShowLogin(false);
-        toast.success("Login Successful!");
+
+        // Update toast to success
+        toast.update(pendingToast, { render: "Login Successful!", type: "success", isLoading: false, autoClose: 3000 });
       } else {
+        // Handle failure (e.g. need signup)
         if (response.data.requireSignup) {
-          toast.info("Account not found. Please complete your profile.", { autoClose: 3000 });
+          // If we optimistically closed, we might need to re-open or just show error
+          toast.update(pendingToast, { render: "Account not found. Please Sign Up.", type: "info", isLoading: false, autoClose: 3000 });
+          setShowLogin(true); // Re-open since action is needed
           setCurrState("Sign Up");
           setData(prev => ({ ...prev, name: user.displayName || "" }));
         } else {
-          toast.error(response.data.message || 'Login failed', { theme: "dark" });
+          toast.update(pendingToast, { render: response.data.message || 'Login failed', type: "error", isLoading: false, autoClose: 3000 });
         }
       }
 
@@ -146,7 +160,7 @@ const LoginPopUp = ({ setShowLogin }) => {
         </div>
         {currState === "Login" ? (
           <p>
-            If you don't have an account, <span onClick={() => setCurrState("Sign Up")}>Click Here To Create</span>
+            If you don't have an account, <span onClick={() => setCurrState("Sign Up")}>Click Here To Register</span>
           </p>
         ) : (
           <p>

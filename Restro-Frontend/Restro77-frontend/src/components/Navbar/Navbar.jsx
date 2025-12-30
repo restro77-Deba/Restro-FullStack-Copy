@@ -1,148 +1,201 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import style from "./navbar.module.css";
 import { assets } from "../../assets/assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
-import { TbH1 } from "react-icons/tb";
+import { FiSearch, FiUser, FiShoppingBag, FiPackage, FiMapPin, FiLogOut, FiHome, FiMenu, FiChevronUp, FiChevronDown, FiX, FiTrash2 } from "react-icons/fi";
+import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { BiSolidOffer } from "react-icons/bi";
 
 const Navbar = ({ setShowLogin }) => {
-  // useState used here for menu
   const [menu, setMenu] = useState("home");
+  const { Items, getTotalCartAmount, token, logOut, clearCart } = useContext(StoreContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const { Items, getTotalCartAmount, token, logOut } = useContext(StoreContext)
+  const [showMiniCart, setShowMiniCart] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [cartBounce, setCartBounce] = useState(false);
 
-  const navigate = useNavigate()
-  const Logout = () => {
-    logOut();
-    navigate("/")
+  // Track previous items to detect first add
+  const [prevItems, setPrevItems] = useState(0);
+
+  // Animate cart and Auto-Open on first add
+  useEffect(() => {
+    if (Items > 0) {
+      setCartBounce(true);
+      const timer = setTimeout(() => setCartBounce(false), 500);
+
+      // If items increased from 0 to >0, auto open mini cart
+      if (prevItems === 0) {
+        setShowMiniCart(true);
+      }
+
+      return () => clearTimeout(timer);
+    }
+    setPrevItems(Items);
+  }, [Items]);
+
+  // Close profile on outside click
+  useEffect(() => {
+    const closeProfile = () => setShowProfile(false);
+    document.addEventListener('click', closeProfile);
+    return () => document.removeEventListener('click', closeProfile);
+  }, []);
+
+  // Highlight active menu based on path
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/") setMenu("home");
+    else if (path === "/cart") setMenu("cart");
+    else if (path === "/myorders") setMenu("orders");
+    else setMenu("other");
+  }, [location]);
+
+  const toggleProfile = (e) => {
+    e.stopPropagation();
+    setShowProfile(prev => !prev);
   }
 
+  const Logout = () => {
+    logOut();
+    navigate("/");
+  };
+
+  const handleClearCart = (e) => {
+    e.stopPropagation();
+    if (typeof clearCart === 'function') {
+      clearCart();
+      setShowMiniCart(false);
+    }
+  };
+
   return (
-    <div className={style.Navbar}>
-      <div>
-        <Link to="/"><img src={assets.logo} className={style.logo} /></Link>
-
-      </div>
-      <ul className={style.navbarMenu}>
-        <li
-          onClick={() => {
-            setMenu("home");
-            navigate('/');
-            window.scrollTo(0, 0);
-          }}
-          className={menu === "home" ? style.active : ""}
-          style={{ cursor: 'pointer' }}
-        >
-          home
-        </li>
-        <li
-          onClick={() => {
-            setMenu("menu");
-            navigate('/');
-            setTimeout(() => {
-              const elem = document.getElementById('ExploreMenu');
-              if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }}
-          className={menu === "menu" ? style.active : ""}
-          style={{ cursor: 'pointer' }}
-        >
-          menu
-        </li>
-        <li
-          onClick={() => {
-            setMenu("cart");
-            navigate('/cart');
-          }}
-          className={menu === "cart" ? style.active : ""}
-          style={{ cursor: 'pointer' }}
-        >
-          cart
-        </li>
-        <li
-          onClick={() => {
-            setMenu("rewards");
-            navigate('/myrewards');
-          }}
-          className={menu === "rewards" ? style.active : ""}
-          style={{ cursor: 'pointer' }}
-        >
-          rewards
-        </li>
-        <li
-          onClick={() => {
-            setMenu("contact-us");
-            const elem = document.getElementById('Footer');
-            if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className={menu === "contact-us" ? style.active : ""}
-          style={{ cursor: 'pointer' }}
-        >
-          contact us
-        </li>
-      </ul>
-      <div className={style.navbarRight}>
-        <img src={assets.search_icon} alt="" onClick={() => {
-          navigate('/');
-          setTimeout(() => {
-            const element = document.getElementById('fooddisplay');
-            const input = document.getElementById('search-input');
-            if (element) {
-              element.scrollIntoView({ behavior: 'smooth' });
-            }
-            if (input) {
-              input.focus();
-            }
-          }, 100)
-        }} className={style.searchTrigger} style={{ cursor: 'pointer' }} />
-        <div className={style.searchIcon}>
-          <Link to='/cart'>
-            <img src={assets.basket_icon} />
-            {Items > 0 && (
-              <div className={style.dot}>{Items}</div>
-            )}
-          </Link>
-
+    <>
+      <div className={style.Navbar}>
+        {/* LOGO */}
+        <Link to="/" className={style.logoContainer}>
+          <img src={assets.logo} className={style.logo} alt="Restro77" />
+        </Link>
+        {/* DESKTOP MENU */}
+        <ul className={style.navbarMenu}>
+          <li onClick={() => { setMenu("home"); navigate('/'); window.scrollTo(0, 0); }} className={menu === "home" ? style.active : ""}>Home</li>
+          <li onClick={() => { setMenu("menu"); navigate('/'); setTimeout(() => document.getElementById('ExploreMenu')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className={menu === "menu" ? style.active : ""}>Menu</li>
+          <li onClick={() => { setMenu("orders"); navigate('/myorders') }} className={menu === "orders" ? style.active : ""}>Orders</li>
+          <li onClick={() => { setMenu("contact"); document.getElementById('Footer')?.scrollIntoView({ behavior: 'smooth' }); }}>Contact</li>
+        </ul>
+        {/* RIGHT SECTION */}
+        <div className={style.navbarRight}>
+          <div className={style.searchIcon} onClick={() => { navigate('/'); setTimeout(() => document.getElementById('search-input')?.focus(), 100); }}>
+            <FiSearch />
+          </div>
+          <div className={style.basketIcon}>
+            <Link to='/cart'>
+              <img src={assets.basket_icon} alt="Cart" />
+              {Items > 0 && <div className={style.dot}>{Items}</div>}
+            </Link>
+          </div>
+          {!token ? (
+            <button onClick={() => setShowLogin(true)} className={style.signInBtn}>Sign in</button>
+          ) : (
+            <div className={style.navbarProfile} onClick={toggleProfile}>
+              {showProfile ? <FiX className={style.profileIconMain} /> : <FiUser className={style.profileIconMain} />}
+              <ul className={`${style.navProfileDropdown} ${showProfile ? style.showDropdown : ""}`}>
+                <li onClick={() => navigate('/myorders')}>
+                  <FiPackage className={style.dropIcon} /> <p>Orders</p>
+                </li>
+                <li onClick={() => navigate('/myrewards')}>
+                  <BiSolidOffer className={style.dropIcon} /> <p>Rewards</p>
+                </li>
+                <li onClick={() => navigate('/myaddresses')}>
+                  <FiMapPin className={style.dropIcon} /> <p>Addresses</p>
+                </li>
+                <li onClick={() => navigate('/profile')}>
+                  <FiUser className={style.dropIcon} /> <p>Profile</p>
+                </li>
+                <hr />
+                <li onClick={Logout} className={style.logoutRow}>
+                  <FiLogOut className={style.dropIcon} /> <p>Logout</p>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
-      {!token ? <button
-        onClick={() => {
-          setShowLogin(true);
-        }}
-      >
-        Sign in
-      </button> : <div className={style.navbarProfile}>
-        <img src={assets.profile_icon} />
-        <ul className={style.navProfileDropdown}>
-          <li onClick={() => navigate('/myorders')}><img src={assets.bag_icon} /><p>Orders</p></li>
-          <li onClick={() => navigate('/myrewards')}><img src={assets.bag_icon} /><p>Rewards</p></li>
-          <li onClick={() => navigate('/myaddresses')}><img src={assets.profile_icon} /><p>Addresses</p></li>
-          <li onClick={() => navigate('/profile')}><img src={assets.profile_icon} /><p>Profile</p></li>
-          <hr />
-          <li onClick={Logout}><img src={assets.logout_icon} /><p>Logout</p></li>
-        </ul>
-      </div>}
-
-      {/* Mobile Menu Icon */}
-      <div className={style.hamburger} onClick={() => setMenu(prev => prev === "mobile-open" ? "home" : "mobile-open")}>
-        <span className={style.bar}></span>
-        <span className={style.bar}></span>
-        <span className={style.bar}></span>
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <div className={style.bottomNav}>
+        <div className={`${style.navItem} ${menu === "home" ? style.activeNav : ""}`} onClick={() => navigate('/')}>
+          <FiHome />
+          <span>Home</span>
+        </div>
+        <div className={`${style.navItem} ${menu === "menu" ? style.activeNav : ""}`} onClick={() => { navigate('/'); setTimeout(() => document.getElementById('ExploreMenu')?.scrollIntoView(), 100); }}>
+          <MdOutlineRestaurantMenu />
+          <span>Menu</span>
+        </div>
+        <div className={`${style.navItemCenter}`}>
+          {/* External Chevron Trigger (Only if Items > 0 && Popup Closed) */}
+          {!showMiniCart && Items > 0 && (
+            <div
+              className={style.cartTrigger}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMiniCart(true);
+              }}
+            >
+              <FiChevronUp />
+            </div>
+          )}
+          {/* Mini Cart Popup (Reverse Dropdown) */}
+          {showMiniCart && Items > 0 && (
+            <div className={style.miniCartPopup} onClick={(e) => {
+              e.stopPropagation();
+              navigate('/cart');
+              setShowMiniCart(false);
+            }}>
+              <div className={style.miniCartHeader}>
+                <span>{Items} Items</span>
+                <div className={style.miniCartDelete} onClick={handleClearCart}>
+                  <FiTrash2 />
+                </div>
+                <span>₹{getTotalCartAmount()}</span>
+              </div>
+              <div className={style.miniCartAction}>
+                View Cart <FiShoppingBag />
+              </div>
+              <div className={style.miniCartClose} onClick={(e) => {
+                e.stopPropagation();
+                setShowMiniCart(false);
+              }}>
+                <FiChevronDown />
+              </div>
+            </div>
+          )}
+          {/* Main Cart Circle */}
+          <div
+            className={`${style.floatingCart} ${Items > 0 ? style.cartHasItems : style.cartEmpty} ${menu === "cart" ? style.activeCart : ""} ${cartBounce ? style.bounce : ""}`}
+            onClick={(e) => {
+              if (Items > 0) {
+                e.stopPropagation();
+                setShowMiniCart(!showMiniCart);
+              } else {
+                navigate('/cart');
+              }
+            }}
+          >
+            <FiShoppingBag className={style.bottomCartIcon} />
+            {Items > 0 && <span className={style.floatCount}>{Items}</span>}
+          </div>
+        </div>
+        <div className={`${style.navItem} ${menu === "orders" ? style.activeNav : ""}`} onClick={() => navigate('/myorders')}>
+          <FiPackage />
+          <span>Orders</span>
+        </div>
+        <div className={`${style.navItem}`} onClick={() => !token ? setShowLogin(true) : navigate('/profile')}>
+          <FiUser />
+          <span>Profile</span>
+        </div>
       </div>
-
-      {/* Mobile Menu Overlay */}
-      {
-        menu === "mobile-open" && (
-          <ul className={style.mobileMenu}>
-            <li onClick={() => { navigate('/'); setMenu("home"); }}>Home</li>
-            <li onClick={() => { navigate('/'); setMenu("menu"); setTimeout(() => document.getElementById('ExploreMenu')?.scrollIntoView(), 100) }}>Menu</li>
-            <li onClick={() => { navigate('/cart'); setMenu("cart"); }}>Cart</li>
-            <li onClick={() => { navigate('/myrewards'); setMenu("rewards"); }}>Rewards</li>
-            <li onClick={() => { const elem = document.getElementById('Footer'); if (elem) elem.scrollIntoView(); setMenu("contact"); }}>Contact</li>
-          </ul>
-        )
-      }
-    </div >
+    </>
   );
 };
 

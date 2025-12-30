@@ -70,16 +70,10 @@
 }
 
 /* Ensure it doesn't overlap the content too much on mobile */
-@media (max-width: 768px) {
+@media (max-width: 850px) {
     .floatingCart {
-        bottom: 90px;
-        /* Increased to 90px to guarantee visibility above all mobile navigation bars */
-        width: 90%;
-        padding: 12px 15px;
-    }
-
-    .cartInfo {
-        font-size: 14px;
+        display: none !important;
+        /* Strictly hide on mobile in favor of Bottom Nav */
     }
 }
 

@@ -11,8 +11,6 @@ import MyOrders from './Pages/Orders/MyOrders'
 import MyRewards from './Pages/MyRewards/MyRewards'
 import MyAddresses from './Pages/MyAddresses/MyAddresses'
 import Profile from './Pages/Profile/Profile'
-
-
 import FloatingCart from './components/FloatingCart/FloatingCart'
 
 const App = () => {
@@ -21,7 +19,6 @@ const App = () => {
     <>
       {showLogin ? <LoginPopUp setShowLogin={setShowLogin} /> : <></>}
       <div className="app">
-
         <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path="/" element={<Home />} />

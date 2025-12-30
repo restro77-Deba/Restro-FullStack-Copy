@@ -1,82 +1,281 @@
+/* ================= THEME VARIABLES ================= */
+:root {
+    --bg-main: #0f1115;
+    --bg-card: #181b21;
+    --bg-input: #1f232b;
+    --border: #2a2e38;
+
+    --text-primary: #ffffff;
+    --text-secondary: #b5b8c0;
+
+    --accent: #ff6b4a;
+    --accent-soft: #ff8364;
+    --highlight: #f4c430;
+}
+
+/* ================= ROOT ================= */
 .placeOrder {
     display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 50px;
-    margin-top: 100px;
-    padding: 0 5%;
-    /* Adds breathing room on sides */
+    max-width: 1100px;
+    margin: 60px auto 40px;
+    padding: 0 14px;
+    gap: 24px;
+    box-sizing: border-box;
+}
 
+/* ================= LEFT / RIGHT ================= */
+.placeOrderLeft,
+.placeOrderRight {
+    width: 100%;
 }
 
 .placeOrderLeft {
-    width: 100%;
-    max-width: 500px;
-}
-
-.placeOrderLeft .title {
-    font-size: 30px;
-    font-weight: 600;
-    margin-bottom: 50px;
-    color: #fff;
-}
-
-.placeOrderLeft input {
-    margin-bottom: 15px;
-    width: 100%;
-    padding: 15px;
-    /* Slightly reduced padding for better fit */
-    border: 1px solid #fff;
-    border-radius: 4px;
-    outline-color: tomato;
-    background: white;
-    color: black;
-}
-
-.placeOrderLeft .multiInputs {
-    display: flex;
-    gap: 10px;
+    max-width: 560px;
 }
 
 .placeOrderRight {
-    width: 100%;
-    max-width: 500px;
+    max-width: 420px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Responsive Media Queries --- */
+/* ================= TITLES ================= */
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
 
-/* For Tablets and Mobile Devices */
+/* ================= FORM ELEMENTS ================= */
+.placeOrderLeft input,
+.placeOrderLeft textarea,
+.placeOrderLeft select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    box-sizing: border-box;
+}
+
+.placeOrderLeft textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.placeOrderLeft input::placeholder,
+.placeOrderLeft textarea::placeholder {
+    color: #8b8f99;
+}
+
+.placeOrderLeft input:focus,
+.placeOrderLeft textarea:focus,
+.placeOrderLeft select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* ================= ORDER TYPE (COMPACT CHIPS) ================= */
+.orderTypeGroup {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.radioLabel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.radioLabel:hover {
+    border-color: var(--accent);
+}
+
+.radioLabel input {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+}
+
+/* ================= CHECKBOX ================= */
+.checkboxRow {
+    display: inline-flex;
+    align-items: center;
+    /* KEY FIX */
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1;
+    /* PREVENT BASELINE DROP */
+    color: var(--text-secondary);
+    margin: 8px 0 10px;
+}
+
+.checkboxRow input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    /* REMOVE DEFAULT OFFSET */
+    flex-shrink: 0;
+    accent-color: var(--accent);
+}
+
+/* ================= INFO BOX ================= */
+.infoBox {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+}
+
+.infoBox p {
+    margin: 3px 0;
+}
+
+/* ================= CART TOTAL ================= */
+.placeOrderRight h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+/* Price rows */
+.placeOrderRight .cartTotalDetails,
+.placeOrderRight .CartTotalDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 13.5px;
+}
+
+.placeOrderRight .cartTotalDetails span:first-child {
+    color: var(--text-secondary);
+}
+
+.placeOrderRight .cartTotalDetails span:last-child {
+    color: var(--text-primary);
+}
+
+/* Divider */
+.placeOrderRight hr {
+    border: none;
+    height: 1px;
+    background: var(--border);
+    margin: 10px 0;
+}
+
+/* Total row */
+.placeOrderRight .CartTotalDetails b:first-child {
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.placeOrderRight .CartTotalDetails b:last-child {
+    color: var(--highlight);
+    font-size: 17px;
+}
+
+/* ================= BUTTON ================= */
+.placeOrder button {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 12px;
+    box-shadow: 0 6px 16px rgba(255, 107, 74, 0.35);
+}
+
+.placeOrder button:hover {
+    opacity: 0.95;
+}
+
+/* ================= SUCCESS MODAL ================= */
+.successOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.successBox {
+    background: var(--bg-card);
+    padding: 24px 20px;
+    border-radius: 16px;
+    text-align: center;
+    width: 90%;
+    max-width: 320px;
+    color: var(--text-primary);
+}
+
+.successBox h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #4caf50;
+}
+
+.successBox p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* ================= TABLET ================= */
 @media (max-width: 900px) {
     .placeOrder {
         flex-direction: column;
-        /* Stack vertically */
-        gap: 30px;
-        margin-top: 50px;
-        align-items: center;
-        /* Center items for better mobile look */
+        gap: 18px;
+        margin-top: 40px;
     }
 
     .placeOrderLeft,
     .placeOrderRight {
         max-width: 100%;
-        /* Take full width on small screens */
     }
 }
 
-/* For small mobile phones */
+/* ================= MOBILE ================= */
 @media (max-width: 480px) {
-    .placeOrderLeft .title {
-        font-size: 24px;
-        margin-bottom: 30px;
+    .placeOrder {
+        padding: 0 10px;
     }
 
-    .placeOrderLeft .multiInputs {
-        flex-direction: column;
-        /* Stack first/last name and city/state */
-        gap: 0;
+    .orderTypeGroup {
+        gap: 6px;
     }
 
-    .placeOrderLeft input {
-        padding: 12px;
+    .title {
+        font-size: 18px;
+    }
+
+    /* Optional premium feel */
+    .placeOrderRight {
+        position: sticky;
+        bottom: 10px;
     }
 }

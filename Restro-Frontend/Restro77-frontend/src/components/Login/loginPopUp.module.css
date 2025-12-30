@@ -1,15 +1,20 @@
-.LoginPopUp{
-    position: absolute;
-    z-index: 7;
+.LoginPopUp {
+    position: fixed;
+    z-index: 2000;
+    /* Ensure it's higher than Navbar (z-index: 10) */
     width: 100%;
     height: 100%;
     background-color: #00000090;
     display: grid;
+    place-items: center;
+    /* Centers the content */
+    top: 0;
+    left: 0;
 }
 
-.LoginPopUpContainer{
+.LoginPopUpContainer {
     place-self: center;
-    width: max(23vw,330px);
+    width: max(23vw, 330px);
     color: #808080;
     background-color: black;
     display: flex;
@@ -21,32 +26,32 @@
     animation: fadeIn 0.5s;
 }
 
-.LoginPopUpTitle{
+.LoginPopUpTitle {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #fff;
 }
 
-.LoginPopUpTitle img{
+.LoginPopUpTitle img {
     width: 16px;
     cursor: pointer;
 }
 
-.LoginPopUpInputs{
+.LoginPopUpInputs {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.LoginPopUpInputs input{
+.LoginPopUpInputs input {
     outline: none;
     border: 1px solid #c9c9c9;
-    padding: 10px ;
+    padding: 10px;
     border-radius: 4px;
 }
 
-.LoginPopUpContainer button{
+.LoginPopUpContainer button {
     border: none;
     padding: 10px;
     border-radius: 4px;
@@ -56,18 +61,18 @@
     cursor: pointer;
 }
 
-.LoginPopUpConditon{
+.LoginPopUpConditon {
     display: flex;
     align-items: start;
     gap: 8px;
     margin-top: -15px;
 }
 
-.LoginPopUpConditon input{
+.LoginPopUpConditon input {
     margin-top: 5px;
 }
 
-.LoginPopUp p span{
+.LoginPopUp p span {
     color: tomato;
     font-weight: 500;
     cursor: pointer;

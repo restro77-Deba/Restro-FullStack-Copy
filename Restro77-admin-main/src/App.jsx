@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from './components/Nabar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import Add from './pages/Add/Add'
 import List from './pages/List/List'
 import Orders from './pages/Orders/Orders'
@@ -33,11 +33,13 @@ const App = () => {
               <Route path='/add' element={<Add URl={URl} />} />
               <Route path='/list' element={<List URl={URl} />} />
               <Route path='/orders' element={<Orders URl={URl} />} />
+              <Route path='/' element={<Navigate to="/orders" />} />
             </Routes>
           </div>
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   )
 }
 
