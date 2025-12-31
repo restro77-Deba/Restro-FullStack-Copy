@@ -6,34 +6,34 @@ const Testimonials = () => {
     const testimonials = [
         {
             id: 1,
-            name: "Sarah Johnson",
+            name: "Aurosis",
             role: "Food Blogger",
-            image: assets.profile_icon,
+            image: "https://randomuser.me/api/portraits/women/44.jpg",
             rating: 5,
             text: "It’s not just food, it’s an experience. The flavors are perfectly balanced."
         },
         {
             id: 2,
-            name: "Michael Chen",
-            role: "Chef",
-            image: assets.profile_icon,
-            rating: 5,
+            name: "Hitesh Sejpada",
+            role: "Meal Subscriber",
+            image: "https://randomuser.me/api/portraits/men/32.jpg",
+            rating: 4,
             text: "Authentic taste! The Schezwan Noodles remind me of home."
         },
         {
             id: 3,
-            name: "Emily Davis",
-            role: "Regular Customer",
-            image: assets.profile_icon,
-            rating: 5,
+            name: "Debasish Dash",
+            role: "Developer",
+            image: "https://randomuser.me/api/portraits/men/86.jpg",
+            rating: 4,
             text: "Super fast delivery and the packaging keeps everything fresh and hot."
         },
         {
             id: 4,
-            name: "Jessica Brown",
-            role: "Designer",
-            image: assets.profile_icon,
-            rating: 5,
+            name: "Ashutosh Pradhan",
+            role: "Regular Customer",
+            image: "https://randomuser.me/api/portraits/men/45.jpg",
+            rating: 4.5,
             text: "The UI is smooth and the food is even better. Truly premium service."
         }
     ];

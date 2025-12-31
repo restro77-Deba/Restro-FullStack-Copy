@@ -1,0 +1,238 @@
+.aboutContainer {
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    padding: 0 20px;
+    color: #e0e0e0;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* ================= HERO SECTION ================= */
+.heroSection {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.heroTitle {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #ff6b4a, #ffb03b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.heroText {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #bbb;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.highlight {
+    color: #ffcc00;
+    font-weight: 600;
+}
+
+/* ================= CAROUSEL (Flipster Style) ================= */
+/* 
+   We will use a 3D transform approach. 
+   The container has perspective.
+   Items are absolute or flex, but we'll use a known "Coverflow" logic.
+*/
+
+.carouselSection {
+    position: relative;
+    padding: 60px 0;
+    overflow: hidden;
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 80px;
+}
+
+.carouselTitle {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    color: #fff;
+    text-align: center;
+}
+
+.carouselContainer {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    height: 400px;
+    /* Adjust based on image aspect ratio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+}
+
+.carouselItem {
+    position: absolute;
+    width: 300px;
+    height: 100%;
+    /* Or auto if images vary */
+    transition: all 0.5s ease-out;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    /* Image sizing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #2a2a2a;
+    overflow: hidden;
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.carouselItem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    /* Let drag events pass if needed, or just clicks */
+    border-radius: 12px;
+}
+
+/* Active Item (Center) */
+.activeItem {
+    transform: translateX(0) scale(1.2) rotateY(0deg);
+    z-index: 10;
+    opacity: 1;
+    border: 2px solid #ffcc00;
+    filter: brightness(1.1);
+}
+
+/* Left Items */
+.leftItem {
+    transform: translateX(-220px) scale(0.9) rotateY(35deg);
+    z-index: 5;
+    opacity: 0.8;
+    filter: brightness(0.6);
+}
+
+.leftHidden {
+    transform: translateX(-450px) scale(0.7) rotateY(45deg);
+    z-index: 1;
+    opacity: 0;
+}
+
+/* Right Items */
+.rightItem {
+    transform: translateX(220px) scale(0.9) rotateY(-35deg);
+    z-index: 5;
+    opacity: 0.8;
+    filter: brightness(0.6);
+}
+
+.rightHidden {
+    transform: translateX(450px) scale(0.7) rotateY(-45deg);
+    z-index: 1;
+    opacity: 0;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.controlBtn {
+    background: transparent;
+    border: 2px solid #555;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.controlBtn:hover {
+    border-color: #ffcc00;
+    color: #ffcc00;
+}
+
+
+/* ================= CONTACT SECTION (Replicated) ================= */
+.contactSection {
+    background: rgba(255, 255, 255, 0.05);
+    /* Glass card feel */
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contactTitle {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ff6b4a;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.contactDetails p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.contactDetails strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.contactIcons {
+    margin-top: 15px;
+    color: #ffd700;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .heroTitle {
+        font-size: 2rem;
+    }
+
+    .carouselContainer {
+        height: 300px;
+        max-width: 100%;
+        overflow: hidden;
+        /* Prevent horizontal scroll on mobile */
+    }
+
+    .carouselItem {
+        width: 200px;
+    }
+
+    .activeItem {
+        transform: translateX(0) scale(1.1);
+    }
+
+    .leftItem {
+        transform: translateX(-140px) scale(0.85) rotateY(25deg);
+    }
+
+    .rightItem {
+        transform: translateX(140px) scale(0.85) rotateY(-25deg);
+    }
+
+    .contactSection {
+        padding: 20px;
+    }
+}

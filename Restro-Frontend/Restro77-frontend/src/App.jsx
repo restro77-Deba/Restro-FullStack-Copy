@@ -11,6 +11,7 @@ import MyOrders from './Pages/Orders/MyOrders'
 import MyRewards from './Pages/MyRewards/MyRewards'
 import MyAddresses from './Pages/MyAddresses/MyAddresses'
 import Profile from './Pages/Profile/Profile'
+import About from './Pages/About/About'
 import FloatingCart from './components/FloatingCart/FloatingCart'
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/myrewards" element={<MyRewards />} />
           <Route path="/myaddresses" element={<MyAddresses />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<About />} />
         </Routes>
         <FloatingCart />
       </div>
