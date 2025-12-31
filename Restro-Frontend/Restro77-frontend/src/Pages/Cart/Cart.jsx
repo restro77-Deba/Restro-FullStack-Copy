@@ -44,7 +44,7 @@ const Cart = () => {
     <div className={style.Cart}>
       <div className={style.CartItems}>
         <div className={style.CartItemsTitle}>
-          <p>Items</p>
+
           <p>Title</p>
           <p>Price</p>
           <p>Quantity</p>
@@ -60,6 +60,7 @@ const Cart = () => {
                 <div
                   className={`${style.CartItemsTitle} ${style.CartItemsItem}`}
                 >
+
                   <p>{item.name}</p>
                   <p><FaRupeeSign />{item.price}</p>
                   <p>{cartItem[item._id]}</p>

@@ -274,7 +274,7 @@ const PlaceOrder = () => {
             <span>₹{getTotalCartAmount()}</span>
           </div>
 
-          {userPoints > 0 && (
+          {(userPoints > 0 && getTotalCartAmount() >= 50) && (
             <label className={style.checkboxRow}>
               <input
                 type="checkbox"
@@ -299,10 +299,13 @@ const PlaceOrder = () => {
       {/* SUCCESS MODAL */}
       {orderSuccess && (
         <div className={style.successOverlay}>
-          <div className={style.successBox}>
-            <h2>🎉 Order Successful</h2>
-            {earnedPoints > 0 && <p>+{earnedPoints} Points Earned</p>}
-            <p>Redirecting...</p>
+          <div className={`${style.successBox} ${style.animateBounce}`}>
+            <div className={style.checkIcon}>✨</div>
+            <h2>Order Placed!</h2>
+            <div className={style.successPoints}>
+              <span>+{earnedPoints}</span> Points
+            </div>
+            <p className={style.redirectText}>Redirecting to your orders...</p>
           </div>
         </div>
       )}

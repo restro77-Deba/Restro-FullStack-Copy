@@ -56,8 +56,7 @@ const placeOrder = async (req, res) => {
         try {
             const order = await razorpay.orders.create(options);
 
-            // Emit new order event (Pending Payment)
-            io.emit("newOrder", newOrder);
+
 
             res.json({
                 success: true,
@@ -104,6 +103,9 @@ const verifyRazorpay = async (req, res) => {
 
             // Emit update
             io.emit("orderStatusUpdated", { orderId: orderId, payment: true });
+
+            // Emit New Order Notification to Admin (Only now, after payment is confirmed)
+            io.emit("newOrder", order);
 
             res.json({ success: true, message: "Payment Verified", pointsEarned: order.pointsEarned });
         } else {

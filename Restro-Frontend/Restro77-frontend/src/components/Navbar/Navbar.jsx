@@ -46,11 +46,21 @@ const Navbar = ({ setShowLogin }) => {
   // Highlight active menu based on path
   useEffect(() => {
     const path = location.pathname;
-    if (path === "/") setMenu("home");
+    if (path === "/profile") setMenu("profile");
     else if (path === "/cart") setMenu("cart");
     else if (path === "/myorders") setMenu("orders");
+    else if (path === "/myrewards") setMenu("other"); // Rewards doesn't have a tab
+    else if (path === "/myaddresses") setMenu("other");
+    else if (path === "/") {
+      // If we are on home, we could be on 'home' or 'menu' tab.
+      // If the current menu is 'menu' (user clicked it), keep it.
+      // Otherwise default to 'home'.
+      if (menu !== "menu") {
+        setMenu("home");
+      }
+    }
     else setMenu("other");
-  }, [location]);
+  }, [location, menu]); // Added menu dependency to support the check above
 
   const toggleProfile = (e) => {
     e.stopPropagation();
@@ -124,11 +134,11 @@ const Navbar = ({ setShowLogin }) => {
       </div>
       {/* MOBILE BOTTOM NAVIGATION */}
       <div className={style.bottomNav}>
-        <div className={`${style.navItem} ${menu === "home" ? style.activeNav : ""}`} onClick={() => navigate('/')}>
+        <div className={`${style.navItem} ${menu === "home" ? style.activeNav : ""}`} onClick={() => { setMenu("home"); navigate('/'); }}>
           <FiHome />
           <span>Home</span>
         </div>
-        <div className={`${style.navItem} ${menu === "menu" ? style.activeNav : ""}`} onClick={() => { navigate('/'); setTimeout(() => document.getElementById('ExploreMenu')?.scrollIntoView(), 100); }}>
+        <div className={`${style.navItem} ${menu === "menu" ? style.activeNav : ""}`} onClick={() => { setMenu("menu"); navigate('/'); setTimeout(() => document.getElementById('ExploreMenu')?.scrollIntoView(), 100); }}>
           <MdOutlineRestaurantMenu />
           <span>Menu</span>
         </div>
@@ -190,7 +200,7 @@ const Navbar = ({ setShowLogin }) => {
           <FiPackage />
           <span>Orders</span>
         </div>
-        <div className={`${style.navItem}`} onClick={() => !token ? setShowLogin(true) : navigate('/profile')}>
+        <div className={`${style.navItem} ${menu === "profile" ? style.activeNav : ""}`} onClick={() => !token ? setShowLogin(true) : navigate('/profile')}>
           <FiUser />
           <span>Profile</span>
         </div>
