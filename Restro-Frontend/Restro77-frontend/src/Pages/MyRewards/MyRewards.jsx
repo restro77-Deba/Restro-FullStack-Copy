@@ -26,7 +26,7 @@ const MyRewards = () => {
                 <div className="points-card">
                     <h3>Current Balance</h3>
                     <h1>{userPoints} <span>Pts</span></h1>
-                    <p>1 Point = ₹1</p>
+                    <p>₹50 = 1 Point </p>
                 </div>
             </div>
 
