@@ -13,9 +13,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sync from parent
+      - name: Sync from original repo
         run: |
-          git remote add upstream https://github.com/YOUR_USERNAME/ORIGINAL_REPO.git
+          git remote add upstream https://github.com/KidOfCoding/Restro-FullStack.git
           git fetch upstream
           git checkout main
           git merge upstream/main --no-edit || true
