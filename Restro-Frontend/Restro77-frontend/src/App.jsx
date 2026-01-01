@@ -15,10 +15,13 @@ import About from './Pages/About/About'
 import FloatingCart from './components/FloatingCart/FloatingCart'
 import PortfolioButton from './components/PortfolioButton/PortfolioButton'
 
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
   return (
     <>
+      <ScrollToTop />
       {showLogin ? <LoginPopUp setShowLogin={setShowLogin} /> : <></>}
       <div className="app">
         <Navbar setShowLogin={setShowLogin} />

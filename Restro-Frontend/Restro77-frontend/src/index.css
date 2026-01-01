@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
 
 
-*{
+* {
   padding: 0%;
   margin: 0%;
   box-sizing: border-box;
@@ -9,28 +9,38 @@
   scroll-behavior: smooth;
 }
 
-body{
+body {
   min-height: 100vh;
   background-color: #0c0d14;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-a{
+input,
+textarea,
+.selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+a {
   text-decoration: none;
   color: #fff;
 }
 
-.app{
+.app {
   width: 90%;
   margin: auto;
 }
 
 
 
-@keyframes fadeIn{
-  0%{
+@keyframes fadeIn {
+  0% {
     opacity: 0;
   }
-  100%{
+
+  100% {
     opacity: 1;
   }
 }

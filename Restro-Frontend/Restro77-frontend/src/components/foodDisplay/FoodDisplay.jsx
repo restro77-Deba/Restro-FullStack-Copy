@@ -8,6 +8,7 @@ const FoodDisplay = ({ category }) => {
   const { food_list } = useContext(StoreContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilter, setShowFilter] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   // Advanced Filter States
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -66,8 +67,21 @@ const FoodDisplay = ({ category }) => {
             placeholder="Search for food..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => {
+              // Delay blur to allow clicking on the hint/filter button if needed, although clicking specific elements should be fine
+              setTimeout(() => setIsSearchFocused(false), 200);
+            }}
             className={style.searchInput}
           />
+
+          {/* Instruction Hint - Show when searching OR focused, AND filters are NOT showing AND no filters applied */}
+          {(searchTerm.length > 0 || isSearchFocused) && !showFilter && selectedCategories.length === 0 && filterType === "all" && (
+            <div className={style.searchHint}>
+              Apply Filters
+            </div>
+          )}
+
           <button
             className={`${style.filterBtn} ${showFilter || selectedCategories.length > 0 || filterType !== "all" ? style.activeFilter : ""}`}
             onClick={() => setShowFilter(!showFilter)}

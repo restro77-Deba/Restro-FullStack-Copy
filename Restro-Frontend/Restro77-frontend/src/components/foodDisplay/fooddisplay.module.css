@@ -30,6 +30,8 @@
     padding: 5px 10px;
     border: 1px solid #eee;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 101;
 }
 
 .searchInput {
@@ -41,7 +43,6 @@
     outline: none;
     color: #333;
     min-width: 0;
-    /* Allow shrinking on very small screens */
 }
 
 .filterBtn {
@@ -51,16 +52,13 @@
     padding: 10px;
     border-radius: 50%;
     color: #555;
-    /* Slightly darker */
     font-size: 18px;
     transition: 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    /* Prevent shrinking on mobile */
     min-width: 44px;
-    /* Touch target size */
     min-height: 44px;
 }
 
@@ -74,11 +72,56 @@
     background-color: #fff0f1;
 }
 
+/* Premium Search Hint Tooltip */
+.searchHint {
+    position: absolute;
+    top: 50%;
+    right: 70px;
+    /* Position to the left of the filter button */
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #ef4f5f, #ff6b6b);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(239, 79, 95, 0.4);
+    animation: slideInLeft 0.3s ease forwards;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 102;
+}
+
+.searchHint::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent transparent #ff6b6b;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translate(-10px, -50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0, -50%);
+    }
+}
+
 /* Dropdown */
 .filterDropdown {
     position: absolute;
     top: 110%;
-    /* Below search bar */
     width: 90%;
     max-width: 400px;
     background: white;
@@ -209,7 +252,6 @@
     font-size: max(2vw, 24px);
     font-weight: 600;
     color: #fff;
-    /* White for dark theme */
     margin-bottom: 20px;
     text-transform: capitalize;
     border-left: 5px solid #ef4f5f;
